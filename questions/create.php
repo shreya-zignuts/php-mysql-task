@@ -1,3 +1,46 @@
+<?php
+// Database connection
+$conn = mysqli_connect("localhost", "root", "password", "QuizManagement");
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Get the test ID from the URL
+if (isset($_GET['test_id'])) {
+    $testId = $_GET['test_id'];
+} else {
+    echo "Test ID not provided.";
+    exit;
+}
+
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data
+    $question = $_POST['question'];
+    $option1 = $_POST['option1'];
+    $option2 = $_POST['option2'];
+    $option3 = $_POST['option3'];
+    $option4 = $_POST['option4'];
+    $correct_option = $_POST['correct_option'];
+
+    // Insert question into database
+    $insert_query = "INSERT INTO questions (test_id, question, option1, option2, option3, option4, correct_option)
+                     VALUES ('$testId', '$question', '$option1', '$option2', '$option3', '$option4', '$correct_option')";
+
+    if (mysqli_query($conn, $insert_query)) {
+        $message = "Question created successfully.";
+        header("Location: index.php?test_id=$testId");
+    } else {
+        $message = "Error: " . $insert_query . "<br>" . mysqli_error($conn);
+    }
+}
+
+// Close connection
+mysqli_close($conn);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,12 +51,13 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Create Question</h1>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="form-group">
-                <label for="test_id">Test ID:</label>
-                <input type="text" class="form-control" id="test_id" name="test_id" required>
+        <h1>Create Question for Test ID: <?php echo $testId; ?></h1>
+        <?php if (isset($message)): ?>
+            <div class="alert alert-success mt-3" role="alert">
+                <?php echo $message; ?>
             </div>
+        <?php endif; ?>
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . '?test_id=' . $testId; ?>" method="post">
             <div class="form-group">
                 <label for="question">Question:</label>
                 <textarea class="form-control" id="question" name="question" rows="3" required></textarea>
@@ -38,43 +82,9 @@
                 <label for="correct_option">Correct Option:</label>
                 <input type="text" class="form-control" id="correct_option" name="correct_option" required>
             </div>
-            <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
-        <?php
-        // Database connection
-        $conn = mysqli_connect("localhost", "root", "password", "QuizManagement");
-
-        // Check connection
-        if (!$conn) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-
-        // Check if form is submitted
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Get form data
-            $test_id = $_POST['test_id'];
-            $question = $_POST['question'];
-            $option1 = $_POST['option1'];
-            $option2 = $_POST['option2'];
-            $option3 = $_POST['option3'];
-            $option4 = $_POST['option4'];
-            $correct_option = $_POST['correct_option'];
-
-            // Insert question into database
-            $insert_query = "INSERT INTO questions (test_id, question, option1, option2, option3, option4, correct_option)
-                             VALUES ('$test_id', '$question', '$option1', '$option2', '$option3', '$option4', '$correct_option')";
-
-            if (mysqli_query($conn, $insert_query)) {
-                echo "<div class='alert alert-success mt-3' role='alert'>Question created successfully.</div>";
-            } else {
-                echo "<div class='alert alert-danger mt-3' role='alert'>Error: " . $insert_query . "<br>" . mysqli_error($conn) . "</div>";
-            }
-        }
-
-        // Close connection
-        mysqli_close($conn);
-        ?>
+        <a href="/tests/details.php?id=<?php echo $testId; ?>" class="btn btn-secondary mt-3">Back to Test Details</a>
     </div>
 </body>
 </html>

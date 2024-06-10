@@ -7,19 +7,26 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Check if test ID is provided
 if (isset($_GET['id'])) {
     $testId = $_GET['id'];
 
-    // Fetch test details from the database
+    // Fetch test details
     $test_query = "SELECT * FROM tests WHERE id = $testId";
     $test_result = mysqli_query($conn, $test_query);
     $test = mysqli_fetch_assoc($test_result);
 
-    // Check if test exists
-    if ($test) {
-        // Display test details
+    // Fetch questions related to the test
+    $questions_query = "SELECT * FROM questions WHERE test_id = $testId";
+    $questions_result = mysqli_query($conn, $questions_query);
+} else {
+    echo "Test ID not provided.";
+    exit;
+}
+
+// Close connection
+mysqli_close($conn);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,24 +44,15 @@ if (isset($_GET['id'])) {
             <div class="card-body">
                 <p><strong>Description:</strong> <?php echo $test['description']; ?></p>
                 <p><strong>Level:</strong> <?php echo $test['level']; ?></p>
-                <!-- Add more details as needed -->
             </div>
-            <div class="card-footer">
-                <a href="/questions/create.php" class="btn btn-dark btn-sm">Create Questions</a>
-                <a href="/admin_dashboard.php" class="btn btn-primary btn-sm">Back to Dashboard</a>
-            </div>
+        </div>
+
+        <div class="card-footer">
+            <a href="/admin_dashboard.php" class="btn btn-primary">Back to Dashboard</a>
+            <a href="/questions/create.php?test_id=<?php echo $testId; ?>" class="btn btn-secondary">Create Question</a>
+            <a href="/questions/index.php?test_id=<?php echo $testId; ?>" class="btn btn-primary">View Questions</a>
+
         </div>
     </div>
 </body>
 </html>
-<?php
-    } else {
-        echo "Test not found.";
-    }
-} else {
-    echo "Test ID not provided.";
-}
-
-// Close connection
-mysqli_close($conn);
-?>

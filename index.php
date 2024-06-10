@@ -67,7 +67,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <title>Login</title>
   </head>
   <body>
-    <?php require 'partials/_nav.php' ?>
     <?php
     if($login){
     echo ' <div class="alert alert-success alert-dismissible fade show" role="alert">

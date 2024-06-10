@@ -1,39 +1,48 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin']!=true){
-    header("location: login.php");
+// Check if user is logged in
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
     exit;
 }
 
+// Database connection
+$conn = mysqli_connect("localhost", "root", "password", "QuizManagement");
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Fetch tests with associated questions
+$tests_query = "SELECT DISTINCT tests.id, tests.name FROM tests JOIN questions ON tests.id = questions.test_id";
+$tests_result = mysqli_query($conn, $tests_query);
+
 ?>
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <?php include 'partials/_user_nav.php'; ?>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <title>Welcome - <?php $_SESSION['email']?></title>
-  </head>
-  <body>
-    <?php require 'partials/_nav.php' ?>
-    
-    <div class="container my-3">
-    <div class="alert alert-success" role="alert">
-      <h4 class="alert-heading">Welcome - <?php echo $_SESSION['email']?></h4>
-      <p>Hey how are you doing? Welcome to iSecure. You are logged in as <?php echo $_SESSION['email']?>. Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-      <hr>
-      <p class="mb-0">Whenever you need to, be sure to logout <a href="/logout.php"> using this link.</a></p>
+    <div class="container mt-5">
+        <h1>All Tests</h1>
+        <div class="list-group mt-3">
+            <?php while ($test = mysqli_fetch_assoc($tests_result)): ?>
+                <a href="user_test/attempt_test.php?test_id=<?php echo $test['id']; ?>" class="list-group-item list-group-item-action"><?php echo $test['name']; ?></a>
+            <?php endwhile; ?>
+        </div>
     </div>
-  </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  </body>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>

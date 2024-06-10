@@ -1,4 +1,8 @@
 <?php
+
+require 'functions.php';
+checkRole('admin');
+
 // Database connection
 $conn = mysqli_connect("localhost", "root", "password", "QuizManagement");
 
@@ -26,11 +30,12 @@ mysqli_close($conn);
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<?php require 'partials/_admin_nav.php' ?>
     <div class="container mt-5">
         <h1 class="mb-4">Welcome, Admin!</h1>
         <a href="/tests/index.php" class="btn btn-primary mb-4">Create Test</a>
 
-        <table class="table">
+        <table class="table text-center">
             <thead class="thead-dark">
                 <tr>
                     <th>Test Name</th>
@@ -47,7 +52,7 @@ mysqli_close($conn);
                         <td><?php echo $test['level']; ?></td>
                         <td>
                        
-                        <a href="/tests/details.php?id=<?php echo $test['id']; ?>" class="btn btn-success btn-sm"><?php echo $test['name']; ?> Details</a>
+                        <a href="/tests/details.php?id=<?php echo $test['id']; ?>" class="btn btn-success btn-sm">View Test</a>
                         <a href='/tests/edit_test.php?id=<?php echo $test['id']; ?>' class="btn btn-primary btn-sm">Edit</a>
                         <a href='/tests/delete.php?id=<?php echo $test['id']; ?>' class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this test?')">Delete</a>
                         </td>
