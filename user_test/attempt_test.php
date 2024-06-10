@@ -49,7 +49,6 @@ mysqli_close($conn);
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <?php include '../partials/_user_nav.php'; ?>
 
     <div class="container mt-5">
         <h1>Attempt Test - <?php echo $test['name']; ?></h1>
@@ -71,21 +70,22 @@ mysqli_close($conn);
             <div class="card-body">
                 <h5 class="card-title">Question <?php echo $question['id']; ?></h5>
                 <p class="card-text"><?php echo $question['question']; ?></p>
+                <input type="hidden" name="test_id" value="<?php echo $test_id; ?>">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="answers[<?php echo $question['id']; ?>]" id="option1" value="<?php echo $question['option1']; ?>">
-                    <label class="form-check-label" for="option1"><?php echo $question['option1']; ?></label>
+                    <input class="form-check-input" type="radio" name="answers[<?php echo $question['id']; ?>]" id="option_<?php echo $question['id']; ?>_1" value="<?php echo $question['option1']; ?>">
+                    <label class="form-check-label" for="option_<?php echo $question['id']; ?>_1"><?php echo $question['option1']; ?></label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="answers[<?php echo $question['id']; ?>]" id="option2" value="<?php echo $question['option2']; ?>">
-                    <label class="form-check-label" for="option2"><?php echo $question['option2']; ?></label>
+                    <input class="form-check-input" type="radio" name="answers[<?php echo $question['id']; ?>]" id="option_<?php echo $question['id']; ?>_2" value="<?php echo $question['option2']; ?>">
+                    <label class="form-check-label" for="option_<?php echo $question['id']; ?>_2"><?php echo $question['option2']; ?></label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="answers[<?php echo $question['id']; ?>]" id="option3" value="<?php echo $question['option3']; ?>">
-                    <label class="form-check-label" for="option3"><?php echo $question['option3']; ?></label>
+                    <input class="form-check-input" type="radio" name="answers[<?php echo $question['id']; ?>]" id="option_<?php echo $question['id']; ?>_3" value="<?php echo $question['option3']; ?>">
+                    <label class="form-check-label" for="option_<?php echo $question['id']; ?>_3"><?php echo $question['option3']; ?></label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="answers[<?php echo $question['id']; ?>]" id="option4" value="<?php echo $question['option4']; ?>">
-                    <label class="form-check-label" for="option4"><?php echo $question['option4']; ?></label>
+                    <input class="form-check-input" type="radio" name="answers[<?php echo $question['id']; ?>]" id="option_<?php echo $question['id']; ?>_4" value="<?php echo $question['option4']; ?>">
+                    <label class="form-check-label" for="option_<?php echo $question['id']; ?>_4"><?php echo $question['option4']; ?></label>
                 </div>
             </div>
         </div>
