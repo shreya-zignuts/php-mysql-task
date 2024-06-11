@@ -73,6 +73,8 @@ if (isset($_POST['update'])) {
                 </select>
             </div>
             <button type="submit" name="update" class="btn btn-primary">Update Test</button>
+            <a href="/admin_dashboard.php" class="btn btn-primary">Back to Dashboard</a>
+
         </form>
     </div>
 

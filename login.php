@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['loggedin'] = true;
             $_SESSION['email'] = $email;
             $_SESSION['role'] = (strpos($email, 'admin') !== false) ? 'admin' : 'user';
+            $_SESSION['user_id'] = $row['id']; // Store user ID
 
             if ($_SESSION['role'] == 'admin') {
                 header("location: admin_dashboard.php");
