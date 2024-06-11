@@ -60,7 +60,7 @@ $available_tests_result = mysqli_query($conn, $available_tests_query);
     <?php require 'partials/_user_nav.php' ?>
 
     <div class="container mt-5">
-        <h1>Test Analytics</h1>
+        <h1 class="text-primary">Test Analytics</h1>
         <div class="row">
             <div class="col-md-6">
                 <div class="card test-card">
@@ -73,14 +73,14 @@ $available_tests_result = mysqli_query($conn, $available_tests_query);
             <div class="col-md-6">
                 <div class="card test-card">
                     <div class="card-body">
-                        <h5 class="card-title">Average Percentage (From Database)</h5>
+                        <h5 class="card-title">Average Percentage</h5>
                         <p class="card-text"><?php echo $average_percentage_from_db; ?>%</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h2>Test-wise Percentage Count (Based on Percentage)</h2>
+        <h2 class="text-primary">Test-wise Percentage Count (Based on Percentage)</h2>
         <table class="table">
             <thead>
                 <tr>
@@ -98,20 +98,24 @@ $available_tests_result = mysqli_query($conn, $available_tests_query);
             </tbody>
         </table>
 
-        <h2>Available Tests</h2>
-        <div class="row">
-            <?php while ($test_row = mysqli_fetch_assoc($available_tests_result)): ?>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo $test_row["name"]; ?></h5>
-                            <p class="card-text"><?php echo $test_row["description"]; ?></p>
-                            <a href="/user_test/start_test.php?test_id=<?php echo $test_row['id']; ?>" class="btn btn-primary">Take Test</a>
+        <h2 class="text-primary">Available Tests</h2>
+        <?php if (mysqli_num_rows($available_tests_result) > 0): ?>
+            <div class="row">
+                <?php while ($test_row = mysqli_fetch_assoc($available_tests_result)): ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo $test_row["name"]; ?></h5>
+                                <p class="card-text"><?php echo $test_row["description"]; ?></p>
+                                <a href="/user_test/start_test.php?test_id=<?php echo $test_row['id']; ?>" class="btn btn-primary">Take Test</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endwhile; ?>
-        </div>
+                <?php endwhile; ?>
+            </div>
+        <?php else: ?>
+            <p>No tests are available.</p>
+        <?php endif; ?>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -125,3 +129,4 @@ $available_tests_result = mysqli_query($conn, $available_tests_query);
 // Close the database connection
 mysqli_close($conn);
 ?>
+
